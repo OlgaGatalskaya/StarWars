@@ -14,10 +14,13 @@ state = {
     loading: true
 };
 
-constructor(){
-    super();
-    this.updatePlanet()
+
+componentDidMount() {
+    this.updatePlanet();
+    this.interval = setInterval(this.updatePlanet, 5000);
+    //clearInterval(this.interval);
 }
+
 
 onPlanetLoaded = (planet) => {
     this.setState({
@@ -35,8 +38,9 @@ onError = (error) => {
 }
 
 
-updatePlanet () {
-    const id = Math.floor(Math.random()*25) + 2;
+updatePlanet = () => {
+    
+    const id = Math.floor(Math.random()*17) + 2;
     this.swapiService
         .getPlanet(id)
         .then(this.onPlanetLoaded)
@@ -44,7 +48,9 @@ updatePlanet () {
 }
 
 
+
     render () {
+        
 
         const {planet, loading, error} = this.state;
 

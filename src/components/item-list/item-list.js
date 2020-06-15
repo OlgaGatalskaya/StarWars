@@ -1,55 +1,59 @@
+
 import React, { Component } from 'react';
+
 import './item-list.css';
-import Spinner from '../spinner';
-import SwapiService from '../../services/swapi-service';
+/*import SwapiService from "../../services/swapi-service";*/
+import Spinner from "../spinner/spinner";
 
 export default class ItemList extends Component {
 
-    swapiService = new SwapiService();
+ 
 
-    state = {
-        peopleList: null
-    }
+  state = {
+    itemList: null
+  };
 
-    componentDidMount() {
-        this.swapiService
-            .getAllPeople()
-            .then((peopleList) => {
-                this.setState({
-                    peopleList
-                });
-            });
-    }
+  componentDidMount() {
+      
+    const { getData } = this.props;
 
-    renderItems (arr) {
-        return arr.map(({id, name}) => {
-            return (
-                <li className="list-group-item"
-                key = {id}
-                onClick={() => this.props.onPersonSelected(id)}>
-                {name}
-                </li>
-            );
+    getData()
+      .then((itemList) => {
+        this.setState({
+          itemList
         });
+      });
+  }
+
+  renderItems(arr) {
+    return arr.map((item) => {
+      const {id} = item;
+
+      const label = this.props.children(item)
+      return (
+        <li className="list-group-item"
+            key={id}
+            onClick={() => this.props.onItemSelected(id)}>
+          {label}
+        </li>
+      );
+    });
+  }
+
+  render() {
+
+    const { itemList } = this.state;
+
+    if (!itemList) {
+      return <Spinner />;
     }
-    
 
-    render() {
+    const items = this.renderItems(itemList);
 
-        const {peopleList} = this.state;
-
-        if (!peopleList) {
-            return <Spinner />;
-        }
-
-        const items = this.renderItems(peopleList);
-
-        return(
-            <ul className="item-list list-group">
-                {items}
-            </ul>
-        );
-    }
-    
+    return (
+      <ul className="item-list list-group">
+        {items}
+      </ul>
+    );
+  }
 }
-

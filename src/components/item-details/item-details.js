@@ -1,58 +1,58 @@
 import React, { Component } from 'react';
-import './person-details.css';
+import './item-details.css';
 import SwapiService from '../../services/swapi-service';
-import Spinner from '../spinner';
 
 
-export default class PersonDetails extends Component {
+
+export default class ItemDetails extends Component {
 
     swapiService = new SwapiService();
 
     state = {
-        person: null
+        item: null
     };
 
     componentDidMount() {
-        this.updatePerson();
+        this.updateItem();
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.personId !== prevProps.personId) {
-            this.updatePerson();
+        if (this.props.itemId !== prevProps.itemId) {
+            this.updateItem();
         }
     }
 
 
-    updatePerson = () => {
-        const {personId} = this.props;
-        if(!personId) {
+    updateItem = () => {
+        const {itemId} = this.props;
+        if(!itemId) {
             return;
         }
         this.swapiService
-            .getPerson(personId)
-            .then((person) => {
+            .getPerson(itemId)
+            .then((item) => {
                 this.setState({
-                    person
+                    item
                 }) 
             })        
     }
 
     render() {
 
-        const {person} = this.state;
+        const {item} = this.state;
 
-        if (!person) {
-            return <Spinner />}
+       /* if (!person) {
+            return <Spinner />}*/
 
-        if(!person) { 
+        if(!item) { 
             return <span>Select a character from the list</span>;
         }
 
-        const { person: {id, name, gender, birthYear, eyeColor}} = this.state
+        const { item: {id, name, gender, birthYear, eyeColor}} = this.state
         
         return (
-            <div className="person-details card">
-                <img className="person-image"
+            <div className="item-details card">
+                <img className="item-image"
                     src={`https://starwars-visualguide.com/assets/img/characters/${id}.jpg`} 
                     alt='caracter'/>
 
